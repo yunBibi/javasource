@@ -51,7 +51,7 @@ public class EmpDAO {
 
 		try {
 			con = getConnection();
-			String sql = "select * from emp";
+			String sql = "select * from emp_temp";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
@@ -96,7 +96,7 @@ public class EmpDAO {
 			con = getConnection();
 			// String sql = "select * from emp where empno = " + empno;
 
-			String sql = "select *from emp where empno = ?";
+			String sql = "select *from emp_temp where empno = ?";
 			pstmt = con.prepareStatement(sql);
 
 			// 물음표에 대한 처리
@@ -139,7 +139,7 @@ public class EmpDAO {
 		try {
 			con = getConnection();
 			// 커넥션을 통해 SQL문 보내기
-			String sql = "select ename, sal from emp dorder by sal";
+			String sql = "select ename, sal from emp_temp dorder by sal";
 			pstmt = con.prepareStatement(sql);
 			// sql구문 실행
 			rs = pstmt.executeQuery();
@@ -182,6 +182,10 @@ public class EmpDAO {
 			pstmt.setInt(2, empno);
 
 			int result = pstmt.executeUpdate();
+			if (result > 0) { // update 성공
+				updateFlag = true;
+
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -194,6 +198,39 @@ public class EmpDAO {
 				e2.printStackTrace();
 			}
 		}
+		return updateFlag; // true면 업데이트 성공, false면 업데이트 실패
+	}
+
+	// 특정 사원의 추가수당 수정
+	public boolean updateComm(int comm, int sal) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean updateFlag = false;
+
+		try {
+			con = getConnection();
+			String sql = "update emp_temp set comm=? where sal <= ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, comm);
+			pstmt.setInt(2, sal);
+			
+			int result = pstmt.executeUpdate();
+			if(result >0) {
+				updateFlag = true;
+				
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+
 		return updateFlag;
 	}
 
