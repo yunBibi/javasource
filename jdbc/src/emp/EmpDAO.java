@@ -194,6 +194,7 @@ public class EmpDAO {
 				e2.printStackTrace();
 			}
 		}
+		return updateFlag;
 	}
 
 }
