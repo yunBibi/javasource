@@ -165,6 +165,27 @@ public class DeptDAO {
 				e2.printStackTrace();
 			}
 		}return flag;
+		
+		
+		// delete from dept_temp where deptno =?
+		// delete
+		
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 	}
-}
+
