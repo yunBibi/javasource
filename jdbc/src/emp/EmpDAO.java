@@ -15,6 +15,8 @@ import java.util.List;
 public class EmpDAO {
 	// 커넥션 걸기
 
+	private static final String EmpDTO = null;
+
 	// 1. 드라이버 로드
 	static {
 		try {
@@ -51,7 +53,7 @@ public class EmpDAO {
 
 		try {
 			con = getConnection();
-			String sql = "select * from emp_temp";
+			String sql = "select * from emp_temp order by hiredate desc";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
@@ -65,6 +67,7 @@ public class EmpDAO {
 				dto.setSal(rs.getInt("sal"));
 				dto.setComm(rs.getInt("comm"));
 				dto.setDeptno(rs.getInt("deptno"));
+
 				list.add(dto);
 			}
 
@@ -214,11 +217,11 @@ public class EmpDAO {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, comm);
 			pstmt.setInt(2, sal);
-			
+
 			int result = pstmt.executeUpdate();
-			if(result >0) {
+			if (result > 0) {
 				updateFlag = true;
-				
+
 			}
 
 		} catch (Exception e) {
@@ -234,4 +237,78 @@ public class EmpDAO {
 		return updateFlag;
 	}
 
+	// 신입 사원 입력
+
+	public boolean insertEmp(EmpDTO dto) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean insertFlag = false;
+
+
+		try {
+			con = getConnection();
+			String sql = "insert into emp_temp(empno, ename, job, mgr, hiredate, sal, comm, deptno)";
+				   sql+=" values(?, ?, ?, ?, sysdate, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, dto.getEmpno());
+			pstmt.setString(2, dto.getEname());
+			pstmt.setString(3, dto.getJob());
+			pstmt.setInt(4, dto.getMgr());
+			pstmt.setInt(5, dto.getSal());
+			pstmt.setInt(6, dto.getComm());
+			pstmt.setInt(7, dto.getDeptno());
+			
+			int result = pstmt.executeUpdate();
+			if (result > 0) {
+				insertFlag = true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				con.close();
+
+			} catch (Exception e2) {
+				e2.printStackTrace();
+
+			}
+			return insertFlag;
+		}
+		
+		
+		// 사원 삭제
+		public boolean deleteEmp(int empno) {
+			
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			boolean deleteFlag = false;
+			
+			try {
+				con = getConnection();
+				String sql = "delete emp_temp where empno=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, empno);
+				
+				int result = pstmt.executeUpdate();
+				if(result>0) {
+					deleteFlag = true;
+				}
+						
+			} catch (Exception e) {
+			e.printStackTrace();
+			} finally {
+				try {
+					pstmt.close();
+					con.close();
+				} catch (Exception e2) {
+				e2.printStackTrace();
+				}
+			} return deleteFlag;
+			
+		}
+
+	}
 }
