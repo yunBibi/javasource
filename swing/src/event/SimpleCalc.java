@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -42,10 +43,10 @@ public class SimpleCalc extends JFrame implements ActionListener {
 
 		JButton btnOk = new JButton("확인");
 		btnOk.addActionListener(this);
-		
+
 		JButton btnReset = new JButton("취소");
 		btnReset.addActionListener(this);
-		
+
 		bottom.add(btnOk);
 		bottom.add(btnReset);
 
@@ -62,12 +63,22 @@ public class SimpleCalc extends JFrame implements ActionListener {
 			// 확인 버튼 클릭
 			// num1, num2에 들어있는 값 가져오기
 			// 결과를 result에 보여주기
-			int op1 = Integer.parseInt(num1.getText());
-			int op2 = Integer.parseInt(num2.getText());
 
-			int total = op1 + op2;
-			// result.setText(total + "");
-			result.setText(String.valueOf(total));
+			try {
+				int op1 = Integer.parseInt(num1.getText());
+				int op2 = Integer.parseInt(num2.getText());
+
+				int total = op1 + op2;
+				// result.setText(total + "");
+				result.setText(String.valueOf(total));
+
+			} catch (Exception e2) {
+				// 개발할 때 예외 발생 단계를 출력
+				// e2.printStackTrace(); 
+				
+				// 사용자에게 메시지출력
+				JOptionPane.showMessageDialog(getParent(), "입력값을 확인해 주세요.");
+			}
 
 		} else {
 			// 취소 버튼 클릭
@@ -75,7 +86,7 @@ public class SimpleCalc extends JFrame implements ActionListener {
 			num1.setText("");
 			num2.setText("");
 			result.setText("");
-			
+
 		}
 
 	}
